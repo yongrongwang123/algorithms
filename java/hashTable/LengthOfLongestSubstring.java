@@ -1,0 +1,49 @@
+/**
+ * Given a string s, find the length of the longest substring without repeating 
+ * characters.
+ * 
+ * Example 1:
+ * Input: s = "abcabcbb"
+ * Output: 3
+ * Explanation: The answer is "abc", with the length of 3.
+ * 
+ * Constraints:
+ * 0 <= s.length <= 5 * 10^4
+ * s consists of English letters, digits, symbols and spaces.
+ */
+
+package hashTable;
+
+public class LengthOfLongestSubstring {
+
+    public static void main(String[] args) {
+        String s = "pwwkew";
+        LengthOfLongestSubstring l = new LengthOfLongestSubstring();
+        System.out.println(l.lengthOfLongestSubstring(s));
+    }
+    
+    /**
+     * 在字符串 s 上使用两个指针从左往右滑动，当快指针不是第一次遇到该字符的时候，
+     * 则慢指针向右滑动，否则慢指针保持不动，同时计算出两个指针的距离
+     */
+    public int lengthOfLongestSubstring(String s) {
+        int pre = 0;
+        int cur = pre;
+        int temp = 0;
+        int[] indexs = new int[256];
+        for (int i = 0; i < indexs.length; i++) {
+            indexs[i] = -1;
+        }
+        for (int i = 0, j = 0; i < s.length(); i++) {
+            if (indexs[s.charAt(i)] != -1) {
+                temp = indexs[s.charAt(i)] + 1;
+                j = (j >= temp ? j : temp);
+            }
+            indexs[s.charAt(i)] = i;
+            cur = i - j + 1;
+            pre = (pre >= cur ? pre : cur);
+        }
+        return pre;
+    }
+
+}
