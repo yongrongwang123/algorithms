@@ -1,0 +1,42 @@
+/**
+ * 739. Daily Temperatures
+ *
+ * Given an array of integers temperatures represents the daily temperatures, return 
+ * an array answer such that answer[i] is the number of days you have to wait after 
+ * the ith day to get a warmer temperature. If there is no future day for which 
+ * this is possible, keep answer[i] == 0 instead.
+ * 
+ * Example 1:
+ * Input: temperatures = [73,74,75,71,69,72,76,73]
+ * Output: [1,1,4,2,1,1,0,0]
+ * 
+ * Constraints:
+ * 1 <= temperatures.length <= 10^5
+ * 30 <= temperatures[i] <= 100
+ */
+
+/**
+ * 用单调栈维护一个非递增序列，遍历数组中每一个元素，如果当前元素比栈顶数据作为索
+ * 引的元素要大，则弹出栈顶数据并且求出索引差值，然后再将当前元素所在索引压入栈中
+ */
+var dailyTemperatures = function(temperatures) {
+    let n = temperatures.length;
+    let days = new Array(n).fill(0);
+    let stack = [];
+    for (let i = 0; i < n; i++) {
+        while (stack.length && temperatures[i] > temperatures[stack.at(-1)]) {
+            let j = stack.pop();
+            days[j] = i - j;
+        }
+        stack.push(i);
+    }
+    return days;
+}
+
+var main = function() {
+    let temperatures = [73,74,75,71,69,72,76,73];
+    console.log('temperatures: ' + temperatures);
+    console.log('days: ' + dailyTemperatures(temperatures));
+}
+
+main();

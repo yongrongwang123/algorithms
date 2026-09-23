@@ -1,0 +1,52 @@
+/**
+ * 279. Perfect Squares
+ *
+ * Given an integer n, return the least number of perfect square numbers that sum 
+ * to n.A perfect square is an integer that is the square of an integer; in other 
+ * words, it is the product of some integer with itself. For example, 1, 4, 9, and 
+ * 16 are perfect squares while 3 and 11 are not.
+ * 
+ * Example 1:
+ * Input: n = 12
+ * Output: 3
+ * Explanation: 12 = 4 + 4 + 4.
+ * 
+ * Constraints:
+ * 1 <= n <= 10^4
+ */
+
+/**
+ * 先将数字0压入队列，之后每弹出一个数字就将该数字和一个完全平方数相加，如果两数之和不大于
+ * 目标值且没有访问过就将该数字压入队列，直到最后等于目标值则返回查找的深度
+ */
+var numSquares = function(n) {
+    let queue = [];
+    let visited = new Array(n + 1).fill(false);
+    queue.push(0);
+    visited[0] = true;
+    let depth = 1;
+    while (queue.length) {
+        for (let i = queue.length; i > 0; i--) {
+            let pre = queue.shift();
+            for (let j = 1, cur = pre + 1; cur <= n; j++, cur = pre + j * j) {
+                if (cur == n) {
+                    return depth;
+                }
+                if (!visited[cur]) {
+                    queue.push(cur);
+                    visited[cur] = true;;
+                }
+            }
+        }
+        depth++;
+    }
+    return depth;
+}
+
+var main = function() {
+    let n = 12;
+    console.log('n: ' + n);
+    console.log('depth: ' + numSquares(n));
+}
+
+main();
